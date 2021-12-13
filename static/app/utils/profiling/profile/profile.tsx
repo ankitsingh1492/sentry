@@ -4,7 +4,7 @@ import {CallTreeNode} from '../callTreeNode';
 import {Frame} from '../frame';
 
 // This is ported from speedscope with a lot of modifications and simplifications.
-export class Profile {
+class Profile {
   duration = 0;
   startedAt = 0;
   endedAt = 0;
@@ -12,12 +12,10 @@ export class Profile {
   unit = 'microseconds';
   name = 'Unknown';
 
+  appendOrderTree: CallTreeNode = new CallTreeNode(Frame.Root, null);
   framesInStack: Set<Profiling.Event['frame']> = new Set();
-  frameIndex: Record<number, Frame> = {};
 
   minFrameDuration = Number.POSITIVE_INFINITY;
-
-  appendOrderTree: CallTreeNode = new CallTreeNode(Frame.Root, null);
 
   samples: CallTreeNode[] = [];
   weights: number[] = [];
@@ -97,3 +95,4 @@ export class Profile {
     return this;
   }
 }
+export {Profile};
