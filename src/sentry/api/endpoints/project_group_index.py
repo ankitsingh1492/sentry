@@ -25,12 +25,15 @@ from sentry.utils.validators import normalize_event_id
 ERR_INVALID_STATS_PERIOD = "Invalid stats_period. Valid choices are '', '24h', and '14d'"
 
 
+from sentry.models import Project
+
+
 class ProjectGroupIndexEndpoint(ProjectEndpoint, EnvironmentMixin):
     permission_classes = (ProjectEventPermission,)
 
     @track_slo_response("workflow")
     @rate_limit_endpoint(limit=3, window=1)
-    def get(self, request: Request, project) -> Response:
+    def get(self, request: Request, project: Project) -> Response:
         """
         List a Project's Issues
         ```````````````````````
@@ -162,7 +165,7 @@ class ProjectGroupIndexEndpoint(ProjectEndpoint, EnvironmentMixin):
         return response
 
     @track_slo_response("workflow")
-    def put(self, request: Request, project) -> Response:
+    def put(self, request: Request, project: Project) -> Response:
         """
         Bulk Mutate a List of Issues
         ````````````````````````````
@@ -230,7 +233,7 @@ class ProjectGroupIndexEndpoint(ProjectEndpoint, EnvironmentMixin):
         )
 
     @track_slo_response("workflow")
-    def delete(self, request: Request, project) -> Response:
+    def delete(self, request: Request, project: Project) -> Response:
         """
         Bulk Remove a List of Issues
         ````````````````````````````
