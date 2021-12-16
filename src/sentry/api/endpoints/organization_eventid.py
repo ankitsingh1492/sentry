@@ -12,7 +12,7 @@ from sentry.utils.validators import INVALID_ID_DETAILS, is_event_id
 
 class EventIdLookupEndpoint(OrganizationEndpoint):
     @rate_limit_endpoint(limit=1, window=1)
-    def get(self, request: Request, organization, event_id) -> Response:
+    def get(self, request: Request, organization, event_id: int) -> Response:
         """
         Resolve an Event ID
         ``````````````````
