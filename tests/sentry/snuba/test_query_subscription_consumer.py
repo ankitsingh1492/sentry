@@ -37,7 +37,6 @@ class BaseQuerySubscriptionTest:
             "subscription_id": "1234",
             "values": {"data": [{"hello": 50}]},
             "timestamp": "2020-01-01T01:23:45.1234",
-            "entity": "events",
         }
 
     @fixture
@@ -139,16 +138,18 @@ class ParseMessageValueTest(BaseQuerySubscriptionTest, unittest.TestCase):
                 payload.pop(field)
         if update_fields:
             payload.update(update_fields)
-        self.run_invalid_schema_test({"version": 2, "payload": payload})
+        self.run_invalid_schema_test({"version": 3, "payload": payload})
 
     def test_invalid_payload(self):
         self.run_invalid_payload_test(remove_fields=["subscription_id"])
         self.run_invalid_payload_test(remove_fields=["result"])
         self.run_invalid_payload_test(remove_fields=["timestamp"])
+        self.run_invalid_payload_test(remove_fields=["entity"])
         self.run_invalid_payload_test(update_fields={"subscription_id": ""})
         self.run_invalid_payload_test(update_fields={"result": {}})
         self.run_invalid_payload_test(update_fields={"result": {"hello": "hi"}})
         self.run_invalid_payload_test(update_fields={"timestamp": -1})
+        self.run_invalid_payload_test(update_fields={"entity": -1})
 
     def test_invalid_version(self):
         with self.assertRaises(InvalidMessageError) as cm:
@@ -156,12 +157,12 @@ class ParseMessageValueTest(BaseQuerySubscriptionTest, unittest.TestCase):
         assert str(cm.exception) == "Version specified in wrapper has no schema"
 
     def test_valid(self):
-        self.run_test({"version": 2, "payload": self.valid_payload})
+        self.run_test({"version": 3, "payload": self.valid_payload})
 
     def test_valid_nan(self):
         payload = deepcopy(self.valid_payload)
         payload["result"]["data"][0]["hello"] = float("nan")
-        self.run_test({"version": 2, "payload": payload})
+        self.run_test({"version": 3, "payload": payload})
 
     def test_old_version(self):
         self.run_test({"version": 1, "payload": self.old_payload})
