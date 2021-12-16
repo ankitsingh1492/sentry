@@ -1,11 +1,12 @@
 import logging
 
 from rest_framework import serializers, status
+from rest_framework.request import Request
 from rest_framework.response import Response
 
 from sentry.api.bases.user import UserEndpoint
 from sentry.api.validators import AllowedEmailField
-from sentry.models import UserEmail
+from sentry.models import User, UserEmail
 
 logger = logging.getLogger("sentry.accounts")
 
@@ -30,12 +31,8 @@ class EmailSerializer(serializers.Serializer):
     email = AllowedEmailField(required=True)
 
 
-from rest_framework.request import Request
-from rest_framework.response import Response
-
-
 class UserEmailsConfirmEndpoint(UserEndpoint):
-    def post(self, request: Request, user) -> Response:
+    def post(self, request: Request, user: User) -> Response:
         """
         Sends a confirmation email to user
         ``````````````````````````````````

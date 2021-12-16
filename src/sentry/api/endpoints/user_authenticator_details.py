@@ -7,7 +7,7 @@ from sentry.api.bases.user import OrganizationUserPermission, UserEndpoint
 from sentry.api.decorators import sudo_required
 from sentry.api.serializers import serialize
 from sentry.auth.superuser import is_active_superuser
-from sentry.models import Authenticator
+from sentry.models import Authenticator, User
 from sentry.security import capture_security_activity
 
 
@@ -47,7 +47,7 @@ class UserAuthenticatorDetailsEndpoint(UserEndpoint):
         return Response(serialize(interface))
 
     @sudo_required
-    def get(self, request: Request, user, auth_id: int) -> Response:
+    def get(self, request: Request, user: User, auth_id: int) -> Response:
         """
         Get Authenticator Interface
         ```````````````````````````
@@ -85,7 +85,7 @@ class UserAuthenticatorDetailsEndpoint(UserEndpoint):
         return Response(response)
 
     @sudo_required
-    def put(self, request: Request, user, auth_id, interface_device_id=None) -> Response:
+    def put(self, request: Request, user: User, auth_id, interface_device_id=None) -> Response:
         """
         Modify authenticator interface
         ``````````````````````````````
@@ -109,7 +109,7 @@ class UserAuthenticatorDetailsEndpoint(UserEndpoint):
             return self._regenerate_recovery_code(authenticator, request, user)
 
     @sudo_required
-    def delete(self, request: Request, user, auth_id, interface_device_id=None) -> Response:
+    def delete(self, request: Request, user: User, auth_id, interface_device_id=None) -> Response:
         """
         Remove authenticator
         ````````````````````
