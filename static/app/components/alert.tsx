@@ -110,9 +110,10 @@ const ExpandIcon = styled(props => (
   cursor: pointer;
   justify-self: flex-end;
 `;
+
 const Alert = styled(
   ({
-    type,
+    type = DEFAULT_TYPE,
     icon,
     children,
     className,
@@ -149,10 +150,6 @@ const Alert = styled(
 )<AlertProps>`
   ${alertStyles}
 `;
-
-Alert.defaultProps = {
-  type: DEFAULT_TYPE,
-};
 
 export {alertStyles};
 
