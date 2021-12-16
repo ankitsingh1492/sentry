@@ -29,7 +29,7 @@ class BaseQuerySubscriptionTest:
 
     @fixture
     def valid_wrapper(self):
-        return {"version": 2, "payload": self.valid_payload}
+        return {"version": 3, "payload": self.valid_payload}
 
     @fixture
     def old_payload(self):
@@ -37,6 +37,7 @@ class BaseQuerySubscriptionTest:
             "subscription_id": "1234",
             "values": {"data": [{"hello": 50}]},
             "timestamp": "2020-01-01T01:23:45.1234",
+            "entity": "events",
         }
 
     @fixture
@@ -50,6 +51,7 @@ class BaseQuerySubscriptionTest:
                         tags[3] WHERE org_id = 1 AND project_id IN tuple(1) AND metric_id = 16
                         AND tags[3] IN tuple(13, 4)""",
             },
+            "entity": "metrics_counters",
             "timestamp": "2020-01-01T01:23:45.1234",
         }
 
