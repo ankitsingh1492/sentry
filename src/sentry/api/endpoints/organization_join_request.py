@@ -37,11 +37,14 @@ def create_organization_join_request(organization, email, ip_address=None):
         pass
 
 
+from sentry.models import Organization
+
+
 class OrganizationJoinRequestEndpoint(OrganizationEndpoint):
     # Disable authentication and permission requirements.
     permission_classes = []
 
-    def post(self, request: Request, organization) -> Response:
+    def post(self, request: Request, organization: Organization) -> Response:
         if organization.get_option("sentry:join_requests") is False:
             return Response(
                 {"detail": "Your organization does not allow join requests."}, status=403

@@ -24,10 +24,13 @@ class DiscoverQueryPermission(OrganizationPermission):
     scope_map = {"POST": ["org:read", "project:read"]}
 
 
+from sentry.models import Organization
+
+
 class DiscoverQueryEndpoint(OrganizationEndpoint):
     permission_classes = (DiscoverQueryPermission,)
 
-    def has_feature(self, request: Request, organization):
+    def has_feature(self, request: Request, organization: Organization):
         return features.has(
             "organizations:discover", organization, actor=request.user
         ) or features.has("organizations:discover-basic", organization, actor=request.user)
@@ -107,7 +110,7 @@ class DiscoverQueryEndpoint(OrganizationEndpoint):
             )
 
     @rate_limit_endpoint(limit=4)
-    def post(self, request: Request, organization) -> Response:
+    def post(self, request: Request, organization: Organization) -> Response:
         if not self.has_feature(request, organization):
             return Response(status=404)
         logger.info("discover1.request", extra={"organization_id": organization.id})
